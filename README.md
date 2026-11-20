@@ -1,169 +1,107 @@
-# NetSecure Pro avec API IA Multi-Origines
-
-Une plateforme sophistiquée combinant sécurité réseau avancée et intelligence artificielle multi-origines pour analyser, visualiser et sécuriser tous les appareils connectés.
-
-![NetSecure Pro](https://cdn.pixabay.com/photo/2017/01/18/08/25/social-media-1989152_960_720.jpg)
-
-## Fonctionnalités principales
-
-### 1. NetSecure Pro - Sécurité réseau
-
-- **Détection des appareils** - Identifiez automatiquement tous les appareils connectés à votre réseau
-- **Analyse de sécurité** - Évaluez le niveau de sécurité global et les vulnérabilités individuelles
-- **Topologie interactive** - Visualisez la structure de votre réseau et les interconnexions
-- **Alertes en temps réel** - Recevez des notifications pour les nouveaux appareils et les menaces potentielles
-- **Rapports détaillés** - Générez des rapports complets sur l'état de santé de votre réseau
-
-### 2. API IA Multi-Origines
-
-- **Analyse intelligente** - Utilisez l'IA pour analyser le trafic réseau et identifier les comportements suspects
-- **Sources d'IA multiples** - Choisissez entre OpenAI, implémentation locale ou sélection automatique
-- **Mécanisme de repli** - Bascule automatique vers des alternatives en cas d'indisponibilité d'un service
-- **Résumé de vulnérabilités** - Obtenez des résumés clairs des rapports techniques complexes
-- **Recommandations personnalisées** - Recevez des suggestions adaptées à votre infrastructure
-
-## Architecture technique
-
-### Double serveur
-
-Le projet fonctionne avec une architecture à double serveur :
-
-- **Serveur Express (NodeJS)** sur le port 5000
-  - Gestion des utilisateurs, des produits et des commandes
-  - API principale et interface utilisateur React
-
-- **Serveur Flask (Python)** sur le port 5001
-  - Services IA multi-origines
-  - Interface NetSecure Pro
-  - Traitement des données de sécurité réseau
-
-### Schéma fonctionnel
-
-```
-Client Web <-> Express Server (5000) <-> Database
-                 |
-                 v
-          Flask Server (5001) <-> OpenAI API
-                 |
-                 v
-          Local AI Algorithms
+TEST_MODE=true bash wifi_detect.sh     # Pour tester la détection WiFi
+TEST_MODE=true bash lte_detect.sh      # Pour tester la détection LTE
+TEST_MODE=true bash bluetooth_detect.sh # Pour tester la détection Bluetooth
+TEST_MODE=true bash esim_detect.sh     # Pour tester la détection e-SIM
 ```
 
-## Origines d'IA disponibles
+Pour configurer les notifications SMS sur Replit :
+1. Ajoutez vos identifiants Twilio dans les Secrets :
+   - TWILIO_ACCOUNT_SID
+   - TWILIO_AUTH_TOKEN
+   - TWILIO_PHONE_NUMBER
+   - NOTIFICATION_PHONE
 
-| Origine | Description | Avantages | Inconvénients |
-|---------|-------------|-----------|---------------|
-| OpenAI  | Service IA externe utilisant GPT-4o | Haute qualité, comprend le contexte | Coût, dépendance externe |
-| Local   | Algorithmes intégrés | Gratuit, rapide, toujours disponible | Qualité limitée |
-| Auto    | Sélection automatique avec repli | Meilleur compromis | Performances variables |
+## Installation sur Termux (Android)
 
-## Installation
+1. Installez les dépendances :
+   ```bash
+   pkg update
+   pkg install root-repo
+   pkg install wireless-tools
+   ```
 
-### Prérequis
+2. Clonez ce dépôt :
+   ```bash
+   git clone [URL_DU_DEPOT]
+   cd [NOM_DU_DOSSIER]
+   ```
 
-- NodeJS 20+
-- Python 3.11+
-- Base de données PostgreSQL (optionnelle)
+3. Donnez les permissions nécessaires :
+   ```bash
+   termux-setup-storage
+   ```
 
-### Installation du serveur Express (principal)
+4. Lancez le script d'installation :
+   ```bash
+   bash install.sh
+   ```
 
+5. Configurez les variables d'environnement pour les notifications SMS :
+   ```bash
+   export TWILIO_ACCOUNT_SID="votre_account_sid"
+   export TWILIO_AUTH_TOKEN="votre_auth_token"
+   export TWILIO_PHONE_NUMBER="votre_numero_twilio"
+   export NOTIFICATION_PHONE="votre_numero_personnel"
+   ```
+
+6. Activez les scripts :
+   ```bash
+   source ~/.network_detect/wifi_detect.sh
+   source ~/.network_detect/lte_detect.sh
+   source ~/.network_detect/bluetooth_detect.sh
+   source ~/.network_detect/esim_detect.sh
+   ```
+
+## Installation sur Ubuntu/Debian
+
+1. Installez les dépendances système :
+   ```bash
+   sudo apt-get update
+   sudo apt-get install wireless-tools modemmanager python3-pip bluetooth
+   ```
+
+2. Installez les dépendances Python :
+   ```bash
+   pip3 install twilio
+   ```
+
+3. Lancez le script d'installation :
+   ```bash
+   bash install.sh
+   ```
+
+## Configuration des Notifications SMS
+
+Pour activer les notifications SMS via Twilio :
+
+1. Créez un compte sur [Twilio](https://www.twilio.com)
+2. Obtenez vos identifiants Twilio (Account SID et Auth Token)
+3. Configurez les variables d'environnement :
+   - TWILIO_ACCOUNT_SID : Votre Account SID Twilio
+   - TWILIO_AUTH_TOKEN : Votre Auth Token Twilio
+   - TWILIO_PHONE_NUMBER : Le numéro Twilio attribué (format international, ex: +33612345678)
+   - NOTIFICATION_PHONE : Votre numéro de téléphone personnel (format international)
+
+## Mode Test
+
+Le mode test permet de simuler la détection des réseaux sans matériel physique :
 ```bash
-# Installation des dépendances NodeJS
-npm install
-
-# Démarrage du serveur Express
-npm run dev
+TEST_MODE=true bash wifi_detect.sh     # Pour tester la détection WiFi
+TEST_MODE=true bash lte_detect.sh      # Pour tester la détection LTE
+TEST_MODE=true bash bluetooth_detect.sh # Pour tester la détection Bluetooth
+TEST_MODE=true bash esim_detect.sh     # Pour tester la détection e-SIM
 ```
 
-### Installation du serveur Flask (IA & sécurité)
+## Résolution des problèmes
 
-```bash
-# Accéder au dossier Flask
-cd FlaskServer
-
-# Installation des dépendances Python
-pip install -r requirements.txt
-
-# Démarrage du serveur Flask
-./run_flask.sh
-```
-
-### Variables d'environnement
-
-Créez un fichier `.env` à la racine du projet avec les variables suivantes :
-
-```
-# OpenAI API (optionnel, pour les fonctionnalités IA avancées)
-OPENAI_API_KEY=votre_clé_api_openai
-
-# Configuration base de données (optionnel)
-DATABASE_URL=postgres://utilisateur:mot_de_passe@hôte:port/base_de_données
-```
-
-## Utilisation
-
-1. Accédez à l'interface principale via `http://localhost:5000`
-2. Pour interagir directement avec l'API IA et les fonctionnalités NetSecure Pro : `http://localhost:5001`
-
-### API IA Multi-Origines
-
-L'API IA est accessible via les endpoints suivants :
-
-```
-GET  /api/ai/config/origin          # Obtenir l'origine IA actuelle
-POST /api/ai/config/origin          # Définir l'origine IA
-POST /api/ai/sentiment              # Analyser le sentiment d'un texte/trafic
-POST /api/ai/summary                # Résumer un texte/rapport
-POST /api/ai/recommendations        # Obtenir des recommandations de sécurité
-```
-
-## Développement
-
-### Structure du projet
-
-```
-.
-├── FlaskServer/                    # Serveur Flask (IA & sécurité)
-│   ├── static/                     # Fichiers statiques
-│   ├── templates/                  # Templates HTML
-│   ├── main.py                     # Application Flask principale
-│   ├── requirements.txt            # Dépendances Python
-│   └── run_flask.sh                # Script de démarrage
-│
-├── client/                         # Frontend React
-│   ├── src/                        # Code source React
-│   └── public/                     # Fichiers statiques
-│
-├── server/                         # Serveur Express principal
-│   ├── controllers/                # Contrôleurs Express
-│   ├── middlewares/                # Middlewares
-│   ├── services/                   # Services
-│   ├── index.ts                    # Point d'entrée Express
-│   └── routes.ts                   # Définition des routes
-│
-├── shared/                         # Code partagé
-│   └── schema.ts                   # Schémas de données
-│
-├── package.json                    # Configuration NPM
-└── README.md                       # Documentation
-```
-
-### Personnalisation
-
-- Modifiez `FlaskServer/templates/*.html` pour personnaliser l'interface NetSecure Pro
-- Ajustez `FlaskServer/static/style.css` pour modifier l'apparence 
-- Consultez `FlaskServer/ANALYSE_TECHNIQUE.md` pour plus de détails sur le module IA
-
-## Sécurité et confidentialité
-
-- Les données d'analyse réseau sont traitées localement par défaut
-- L'utilisation d'OpenAI est optionnelle et nécessite une clé API
-- Aucune donnée de sécurité réseau n'est stockée en externe
-
-## Support et contact
-
-Pour toute question, bug ou suggestion, veuillez créer une issue dans ce dépôt ou contacter l'équipe de support à l'adresse support@netsecurepro.com
-
-## Licence
-
-Copyright © 2025 NetSecure Pro. Tous droits réservés.
+- Les journaux sont stockés dans : `~/.network_detect/network_detect.log`
+- Pour Termux :
+  - Vérifiez que le WiFi et les données mobiles sont activés dans les paramètres Android
+  - Vérifiez que Termux a les permissions réseau nécessaires
+  - Pour les appareils rootés, assurez-vous d'avoir les permissions root correctes
+- Pour Ubuntu/Debian :
+  - En cas d'erreur de permission :
+    ```bash
+    sudo usermod -a -G netdev $USER
+    sudo usermod -a -G dialout $USER  # Pour l'accès aux modems LTE
+    sudo usermod -a -G bluetooth $USER # Pour l'accès au Bluetooth
