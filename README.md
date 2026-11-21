@@ -104,4 +104,4 @@ TEST_MODE=true bash esim_detect.sh     # Pour tester la détection e-SIM
     ```bash
     sudo usermod -a -G netdev $USER
     sudo usermod -a -G dialout $USER  # Pour l'accès aux modems LTE
-    sudo usermod -a -G bluetooth $USER 
+    sudo usermod -a -G bluetooth $USER # Pour l'accès au Bluetooth
